@@ -4,6 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Random;
 
+/**
+ * 转账
+ * 此时需要锁住两个对象，钱和账户，两个对象需要同时上锁
+ */
 @Slf4j(topic = "c.ExerciseTransfer")
 public class ExerciseTransfer {
     public static void main(String[] args) throws InterruptedException {
@@ -54,6 +58,10 @@ class Account {
 
     // 转账
     public void transfer(Account target, int amount) {
+        /*
+         * this的money和target两个对象需要保护
+         * 就是有多个保护的对象如何保护
+         */
         synchronized(Account.class) {
             if (this.money >= amount) {
                 this.setMoney(this.getMoney() - amount);

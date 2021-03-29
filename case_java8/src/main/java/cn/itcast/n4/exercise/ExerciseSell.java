@@ -7,10 +7,14 @@ import java.util.List;
 import java.util.Random;
 import java.util.Vector;
 
+/**
+ * 卖票问题
+ * 共享变量不是同一个，因此针对每一个步骤单独加锁即可
+ */
 @Slf4j(topic = "c.ExerciseSell")
 public class ExerciseSell {
     public static void main(String[] args) throws InterruptedException {
-        // 模拟多人买票
+        // 买票窗口,模拟多人买票,一共1000张票
         TicketWindow window = new TicketWindow(1000);
 
         // 所有线程的集合
@@ -19,9 +23,10 @@ public class ExerciseSell {
         List<Integer> amountList = new Vector<>();
         for (int i = 0; i < 2000; i++) {
             Thread thread = new Thread(() -> {
-                // 买票
+                // 买票窗口，需要保护
                 int amount = window.sell(random(5));
-                // 统计买票数
+                // 统计买票数，由于Vector本身是线程安全的，所以不需要再次保护，
+                // 并且两个操作针对的是不同的变量，所以不需要两个步骤都加锁
                 amountList.add(amount);
             });
             threadList.add(thread);
@@ -39,7 +44,6 @@ public class ExerciseSell {
 
     // Random 为线程安全
     static Random random = new Random();
-
     // 随机 1~5
     public static int random(int amount) {
         return random.nextInt(amount) + 1;
