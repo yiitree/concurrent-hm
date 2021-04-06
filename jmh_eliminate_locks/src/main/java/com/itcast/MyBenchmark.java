@@ -27,10 +27,11 @@ package com.itcast;
 
 import org.openjdk.jmh.annotations.*;
 
-import java.util.Arrays;
-import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 锁消除的一个案例
+ */
 @Fork(1)
 @BenchmarkMode(Mode.AverageTime)
 @Warmup(iterations=3)
@@ -43,7 +44,7 @@ public class MyBenchmark {
         x++;
     }
     @Benchmark
-    // JIT  即时编译器
+    // JIT  即时编译器会自动优化掉
     public void b() throws Exception {
         Object o = new Object();
         synchronized (o) {
