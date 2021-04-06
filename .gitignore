@@ -84,7 +84,7 @@ hs_err_pid*
 # IntelliJ project files
 .idea
 *.iml
-out
+out/
 gen
 target/
 .mvn
