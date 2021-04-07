@@ -2,7 +2,6 @@ package cn.itcast.test;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.sql.Time;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 

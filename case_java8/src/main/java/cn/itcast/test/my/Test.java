@@ -1,5 +1,6 @@
 package cn.itcast.test.my;
 
+import cn.itcast.n2.util.Sleeper;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -13,9 +14,17 @@ import lombok.extern.slf4j.Slf4j;
 public class Test {
     public static void main(String[] args){
 
+        // 居民先把空白信放进信箱
         for (int i = 0; i < 3; i++) {
-            People
+            final People people = new People();
+            people.start();
         }
 
+        Sleeper.sleep(1);
+
+        for (int i = 0; i < 3; i++) {
+            final Postman postman = new Postman(i, "信内容：");
+            postman.start();
+        }
     }
 }

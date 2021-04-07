@@ -1,11 +1,19 @@
 package cn.itcast.test;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.LinkedList;
 
 import static cn.itcast.n2.util.Sleeper.sleep;
 
+/**
+ * 消息队列模式
+ * 是线程之间交流的，和rabbitmq不同，这个是进程之间交流
+ */
 @Slf4j(topic = "c.Test21")
 public class Test21 {
 
@@ -33,12 +41,12 @@ public class Test21 {
 @Slf4j(topic = "c.MessageQueue")
 class MessageQueue {
     // 消息的队列集合
-    private LinkedList<Message> list = new LinkedList<>();
+    private final LinkedList<Message> list = new LinkedList<>();
     // 队列容量
-    private int capcity;
+    private final int capacity;
 
-    public MessageQueue(int capcity) {
-        this.capcity = capcity;
+    public MessageQueue(int capacity) {
+        this.capacity = capacity;
     }
 
     // 获取消息
@@ -56,6 +64,7 @@ class MessageQueue {
             // 从队列头部获取消息并返回
             Message message = list.removeFirst();
             log.debug("已消费消息 {}", message);
+            // 使用消息，然后唤醒存入消息，因为有可能队列满了，存入在等待中
             list.notifyAll();
             return message;
         }
@@ -65,7 +74,7 @@ class MessageQueue {
     public void put(Message message) {
         synchronized (list) {
             // 检查对象是否已满
-            while(list.size() == capcity) {
+            while(list.size() == capacity) {
                 try {
                     log.debug("队列已满, 生产者线程等待");
                     list.wait();
@@ -76,33 +85,17 @@ class MessageQueue {
             // 将消息加入队列尾部
             list.addLast(message);
             log.debug("已生产消息 {}", message);
+            // 存入消息，防止消费者看没消息还在等待中
             list.notifyAll();
         }
     }
 }
 
+@ToString
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 final class Message {
     private int id;
     private Object value;
-
-    public Message(int id, Object value) {
-        this.id = id;
-        this.value = value;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public Object getValue() {
-        return value;
-    }
-
-    @Override
-    public String toString() {
-        return "Message{" +
-                "id=" + id +
-                ", value=" + value +
-                '}';
-    }
 }

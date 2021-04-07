@@ -1,7 +1,5 @@
 package cn.itcast.test.my;
 
-import cn.itcast.test.my.*;
-
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
@@ -16,7 +14,7 @@ public class MyMailbox {
     /** 选择hashTable，线程安全 */
     private static Map<Integer, MyMail> boxes = new Hashtable<>();
     /** 信箱编号 */
-    private static int id = 1;
+    private static int id = 0;
 
     /**
      * 得到所有信件的id

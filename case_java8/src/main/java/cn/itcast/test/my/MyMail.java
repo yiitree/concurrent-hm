@@ -17,7 +17,7 @@ public class MyMail {
      * 写信
      */
     public void setContent(String content) throws InterruptedException {
-        synchronized (lock){
+        synchronized (this){
             // 写完信，唤醒读线程
             TimeUnit.SECONDS.sleep(2);
             this.content = content;
@@ -29,11 +29,11 @@ public class MyMail {
      * 读信---必须先写信才可以否则返回null
      */
     public String get() throws InterruptedException {
-        synchronized (lock){
-            TimeUnit.SECONDS.sleep(2);
+        synchronized (this){
             while (content == null){
                 this.wait();
             }
+            TimeUnit.SECONDS.sleep(2);
             return this.content;
         }
     }

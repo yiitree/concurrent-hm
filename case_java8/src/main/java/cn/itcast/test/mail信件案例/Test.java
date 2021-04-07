@@ -19,7 +19,7 @@ public class Test {
         }
         // 间隔一秒后开始送信
         Sleeper.sleep(1);
-        // 送信
+        // 遍历有多少信件，每一个信都让一个邮递员送信
         for (Integer id : Mailboxes.getIds()) {
             new Postman(id, "信件内容为：" + id).start();
         }
