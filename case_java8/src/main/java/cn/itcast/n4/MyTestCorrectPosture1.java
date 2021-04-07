@@ -7,8 +7,8 @@ import static cn.itcast.n2.util.Sleeper.sleep;
 /**
  * wait和notify使用
  */
-@Slf4j(topic = "c.TestCorrectPosture")
-public class TestCorrectPostureStep1 {
+@Slf4j(topic = "c.MyTestCorrectPosture1")
+public class MyTestCorrectPosture1 {
     /**
      * 锁对象，设置为final
      */
@@ -18,17 +18,19 @@ public class TestCorrectPostureStep1 {
     static boolean hasTakeout = false;
 
     public static void main(String[] args) {
-
         // 线程1：必须要有烟才可以继续执行
         new Thread(() -> {
             synchronized (room) {
                 log.debug("有烟没？[{}]", hasCigarette);
                 if (!hasCigarette) {
                     log.debug("没烟，先歇会！");
-                    // 每两秒起来看看有没有人送烟，而且不放弃锁
-                    sleep(3);
+                    try {
+                        // 没有烟酒直接进入等待线程，等待别人叫自己再干活
+                        room.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
-                log.debug("有烟没？[{}]", hasCigarette);
                 if (hasCigarette) {
                     log.debug("可以开始干活了");
                 }
@@ -47,10 +49,11 @@ public class TestCorrectPostureStep1 {
         // 线程3：送烟线程
         sleep(1);
         new Thread(() -> {
-            // 这里能不能加 synchronized (room)？不能加，要不然永远送不到
+            // 这里能不能加 synchronized (room)？
             synchronized (room) {
                 hasCigarette = true;
                 log.debug("烟到了噢！");
+                room.notifyAll();
             }
         }, "送烟的").start();
     }
