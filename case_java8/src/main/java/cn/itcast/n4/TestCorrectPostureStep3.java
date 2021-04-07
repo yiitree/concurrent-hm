@@ -10,8 +10,13 @@ public class TestCorrectPostureStep3 {
     static boolean hasCigarette = false;
     static boolean hasTakeout = false;
 
-    // 虚假唤醒
+    /**
+     * notify有可能唤醒错误---虚假唤醒
+     * @param args
+     */
     public static void main(String[] args) {
+
+        // 等待烟线程
         new Thread(() -> {
             synchronized (room) {
                 log.debug("有烟没？[{}]", hasCigarette);
@@ -32,6 +37,7 @@ public class TestCorrectPostureStep3 {
             }
         }, "小南").start();
 
+        // 等待外卖线程
         new Thread(() -> {
             synchronized (room) {
                 Thread thread = Thread.currentThread();
@@ -58,10 +64,10 @@ public class TestCorrectPostureStep3 {
             synchronized (room) {
                 hasTakeout = true;
                 log.debug("外卖到了噢！");
-                room.notifyAll();
+//                room.notify();// 会随机叫醒一个，有可能就错误唤醒了
+                room.notifyAll();// 所有都叫醒，防止叫错了
             }
         }, "送外卖的").start();
-
 
     }
 

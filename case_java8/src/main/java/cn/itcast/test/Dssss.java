@@ -14,5 +14,6 @@ public class Dssss {
         synchronized (lock){
             counter++;
         }
+        System.out.println(1);
     }
 }

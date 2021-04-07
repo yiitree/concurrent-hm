@@ -4,6 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import static cn.itcast.n2.util.Sleeper.sleep;
 
+/**
+ * notify 和 notifyAll区别
+ */
 @Slf4j(topic = "c.TestWaitNotify")
 public class TestWaitNotify {
     final static Object obj = new Object();

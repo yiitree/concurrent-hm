@@ -16,6 +16,7 @@ public class TestCorrectPostureStep5 {
         new Thread(() -> {
             synchronized (room) {
                 log.debug("有烟没？[{}]", hasCigarette);
+                // 修改为while方法，防止唤醒一次失败就直接不执行了
                 while (!hasCigarette) {
                     log.debug("没烟，先歇会！");
                     try {

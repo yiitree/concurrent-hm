@@ -59,7 +59,7 @@ public class TestCorrectPostureStep4 {
             synchronized (room) {
                 hasTakeout = true;
                 log.debug("外卖到了噢！");
-                room.notifyAll();
+                room.notifyAll();// 会把两个都叫醒---注意，此时唤醒后从wait阻塞位置继续执行，而不是重头开始执行
             }
         }, "送外卖的").start();
 
