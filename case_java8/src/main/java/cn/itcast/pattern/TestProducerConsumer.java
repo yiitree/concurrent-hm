@@ -37,8 +37,8 @@ public class TestProducerConsumer {
 }
 
 class Message {
-    private int id;
-    private Object message;
+    private final int id;
+    private final Object message;
 
     public Message(int id, Object message) {
         this.id = id;
@@ -56,8 +56,8 @@ class Message {
 
 @Slf4j(topic = "c.MessageQueue")
 class MessageQueue {
-    private LinkedList<Message> queue;
-    private int capacity;
+    private final LinkedList<Message> queue;
+    private final int capacity;
 
     public MessageQueue(int capacity) {
         this.capacity = capacity;

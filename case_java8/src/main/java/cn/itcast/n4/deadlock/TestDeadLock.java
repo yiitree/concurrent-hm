@@ -4,6 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import static cn.itcast.n2.util.Sleeper.sleep;
 
+/**
+ * 死锁
+ */
 @Slf4j(topic = "c.TestDeadLock")
 public class TestDeadLock {
     public static void main(String[] args) {
@@ -13,6 +16,7 @@ public class TestDeadLock {
     private static void test1() {
         Object A = new Object();
         Object B = new Object();
+
         Thread t1 = new Thread(() -> {
             synchronized (A) {
                 log.debug("lock A");
@@ -34,6 +38,7 @@ public class TestDeadLock {
                 }
             }
         }, "t2");
+
         t1.start();
         t2.start();
     }

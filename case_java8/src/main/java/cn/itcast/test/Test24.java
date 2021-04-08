@@ -7,11 +7,16 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import static cn.itcast.n2.util.Sleeper.sleep;
 
+/**
+ * ReentrantLock条件变量
+ * 就是指定存放到指定的阻塞队列
+ */
 @Slf4j(topic = "c.Test24")
 public class Test24 {
     static final Object room = new Object();
     static boolean hasCigarette = false;
     static boolean hasTakeout = false;
+    // 锁
     static ReentrantLock ROOM = new ReentrantLock();
     // 等待烟的休息室
     static Condition waitCigaretteSet = ROOM.newCondition();
@@ -20,7 +25,6 @@ public class Test24 {
 
     public static void main(String[] args) {
 
-
         new Thread(() -> {
             ROOM.lock();
             try {
@@ -28,6 +32,7 @@ public class Test24 {
                 while (!hasCigarette) {
                     log.debug("没烟，先歇会！");
                     try {
+                        // 设置到等烟阻塞队列
                         waitCigaretteSet.await();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -46,6 +51,7 @@ public class Test24 {
                 while (!hasTakeout) {
                     log.debug("没外卖，先歇会！");
                     try {
+                        // 设置到等早饭阻塞队列
                         waitTakeoutSet.await();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -62,6 +68,7 @@ public class Test24 {
             ROOM.lock();
             try {
                 hasTakeout = true;
+                // 唤醒等外卖队列
                 waitTakeoutSet.signal();
             } finally {
                 ROOM.unlock();
@@ -74,6 +81,7 @@ public class Test24 {
             ROOM.lock();
             try {
                 hasCigarette = true;
+                // 唤醒等烟队列
                 waitCigaretteSet.signal();
             } finally {
                 ROOM.unlock();

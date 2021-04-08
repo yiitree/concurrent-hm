@@ -31,7 +31,7 @@ public class TestExecutors {
 
     private static void test1() {
         ExecutorService pool = Executors.newFixedThreadPool(2, new ThreadFactory() {
-            private AtomicInteger t = new AtomicInteger(1);
+            private final AtomicInteger t = new AtomicInteger(1);
 
             @Override
             public Thread newThread(Runnable r) {

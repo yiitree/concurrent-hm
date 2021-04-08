@@ -16,7 +16,7 @@ public class Test35 {
 }
 
 class DecimalAccountCas implements DecimalAccount {
-    private AtomicReference<BigDecimal> balance;
+    private final AtomicReference<BigDecimal> balance;
 
     public DecimalAccountCas(BigDecimal balance) {
 //        this.balance = balance;

@@ -1,10 +1,13 @@
-package cn.itcast.test;
-
-import sun.rmi.runtime.Log;
+package cn.itcast.test.交替执行;
 
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * 交替执行：
+ * ReentrantLock:awaitSignal多个阻塞队列
+ *
+ */
 public class Test30 {
     public static void main(String[] args) throws InterruptedException {
         AwaitSignal awaitSignal = new AwaitSignal(5);
@@ -34,12 +37,12 @@ public class Test30 {
 }
 
 class AwaitSignal extends ReentrantLock{
-    private int loopNumber;
+    private final int loopNumber;
 
     public AwaitSignal(int loopNumber) {
         this.loopNumber = loopNumber;
     }
-    //            参数1 打印内容， 参数2 进入哪一间休息室, 参数3 下一间休息室
+    // 参数1 打印内容， 参数2 进入哪一间休息室, 参数3 下一间休息室
     public void print(String str, Condition current, Condition next) {
         for (int i = 0; i < loopNumber; i++) {
             lock();

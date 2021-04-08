@@ -118,7 +118,7 @@ class MyQueue<E> implements Queue<E> {
     }
 
     private volatile Node<E> last;
-    private volatile Node<E> head;
+    private final Node<E> head;
 
     private E dequeue() {
         /*Node<E> h = head;

@@ -10,7 +10,7 @@ import static cn.itcast.n2.util.Sleeper.sleep;
 public class LockCas {
     // 0 没加锁
     // 1 加锁
-    private AtomicInteger state = new AtomicInteger(0);
+    private final AtomicInteger state = new AtomicInteger(0);
 
     public void lock() {
         while (true) {

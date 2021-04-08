@@ -2,6 +2,8 @@ package cn.itcast.test.my;
 
 import lombok.extern.slf4j.Slf4j;
 
+import static cn.itcast.test.my.MyMailbox.putMail;
+
 /**
  * 居民
  */
@@ -10,7 +12,7 @@ public class People extends Thread{
 
     @Override
     public void run() {
-        MyMail myMail = MyMailbox.putMail();
+        MyMail myMail = putMail();
         log.debug("居民在信箱中放入信件，此时信件没有内容");
         // 读取信件内容
         String content = null;

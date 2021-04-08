@@ -24,9 +24,9 @@ public class TestGenericDao {
 }
 
 class GenericDaoCached extends GenericDao {
-    private GenericDao dao = new GenericDao();
-    private Map<SqlPair, Object> map = new HashMap<>();
-    private ReentrantReadWriteLock rw = new ReentrantReadWriteLock();
+    private final GenericDao dao = new GenericDao();
+    private final Map<SqlPair, Object> map = new HashMap<>();
+    private final ReentrantReadWriteLock rw = new ReentrantReadWriteLock();
 
     @Override
     public <T> List<T> queryList(Class<T> beanClass, String sql, Object... args) {
@@ -36,7 +36,7 @@ class GenericDaoCached extends GenericDao {
     @Override
     public <T> T queryOne(Class<T> beanClass, String sql, Object... args) {
         // 先从缓存中找，找到直接返回
-        SqlPair key = new SqlPair(sql, args);;
+        SqlPair key = new SqlPair(sql, args);
         rw.readLock().lock();
         try {
             T value = (T) map.get(key);
@@ -76,8 +76,8 @@ class GenericDaoCached extends GenericDao {
     }
 
     class SqlPair {
-        private String sql;
-        private Object[] args;
+        private final String sql;
+        private final Object[] args;
 
         public SqlPair(String sql, Object[] args) {
             this.sql = sql;

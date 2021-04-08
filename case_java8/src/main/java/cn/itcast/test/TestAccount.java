@@ -13,7 +13,7 @@ public class TestAccount {
 }
 
 class AccountCas implements Account {
-    private AtomicInteger balance;
+    private final AtomicInteger balance;
 
     public AccountCas(int balance) {
         this.balance = new AtomicInteger(balance);

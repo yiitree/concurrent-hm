@@ -9,9 +9,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j(topic = "c.FileSaver")
 public class FileSaver {
-    private String filename;
+    private final String filename;
 
-    private ObjectMapper mapper;
+    private final ObjectMapper mapper;
     private boolean changed;
 
     public FileSaver(String filename) {

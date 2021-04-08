@@ -1,4 +1,4 @@
-package cn.itcast.test;
+package cn.itcast.test.交替执行;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -7,27 +7,38 @@ import java.util.Map;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * 交替执行：
+ * ReentrantLock
+ */
 @Slf4j(topic = "c.Test28")
 public class Test28 {
     public static void main(String[] args) {
+        // 等待队列
         AwaitSignal2 as = new AwaitSignal2(3);
-        as.start(new Thread(() -> {
-            as.print("a");
-        }), new Thread(() -> {
-            as.print("b");
-        }), new Thread(() -> {
-            as.print("c");
-        }), new Thread(() -> {
-            as.print("d");
-        }));
-
-
+        as.start(
+                new Thread(() -> { as.print("a"); }),
+                new Thread(() -> { as.print("b"); }),
+                new Thread(() -> { as.print("c"); }),
+                new Thread(() -> { as.print("d"); })
+        );
     }
 }
 
+/**
+ * 等待队列
+ */
 @Slf4j(topic = "c.AwaitSignal")
 class AwaitSignal2 extends ReentrantLock {
-    private Map<Thread, Condition[]> map = new HashMap<>();
+
+    // 循环次数
+    private final int loopNumber;
+
+    public AwaitSignal2(int loopNumber) {
+        this.loopNumber = loopNumber;
+    }
+
+    private final Map<Thread, Condition[]> map = new HashMap<>();
 
     public void start(Thread... threads) {
         Condition[] temp = new Condition[threads.length];
@@ -76,10 +87,4 @@ class AwaitSignal2 extends ReentrantLock {
         }
     }
 
-    // 循环次数
-    private int loopNumber;
-
-    public AwaitSignal2(int loopNumber) {
-        this.loopNumber = loopNumber;
-    }
 }

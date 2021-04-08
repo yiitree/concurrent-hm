@@ -1,7 +1,10 @@
-package cn.itcast.test;
+package cn.itcast.test.交替执行;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 交替执行 wait-notify
+ */
 @Slf4j(topic = "c.Test27")
 public class Test27 {
     public static void main(String[] args) {
@@ -43,10 +46,10 @@ class WaitNotify {
         }
     }
 
-    // 等待标记
+    // 等待标记---自己的编号
     private int flag; // 2
     // 循环次数
-    private int loopNumber;
+    private final int loopNumber;
 
     public WaitNotify(int flag, int loopNumber) {
         this.flag = flag;

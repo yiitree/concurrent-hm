@@ -12,7 +12,7 @@ import java.util.Set;
 public class Mailboxes {
 
     /** 选择hashTable，线程安全 */
-    private static Map<Integer, GuardedObject> boxes = new Hashtable<>();
+    private static final Map<Integer, GuardedObject> boxes = new Hashtable<>();
     /** 信箱编号 */
     private static int id = 1;
 

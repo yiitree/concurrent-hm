@@ -5,6 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Random;
 
+/**
+ * 死锁问题，哲学家就餐
+ */
 public class TestDeadLock {
     public static void main(String[] args) {
         Chopstick c1 = new Chopstick("1");
@@ -12,14 +15,21 @@ public class TestDeadLock {
         Chopstick c3 = new Chopstick("3");
         Chopstick c4 = new Chopstick("4");
         Chopstick c5 = new Chopstick("5");
+        // 此时都是先拿左边，后拿右边
         new Philosopher("苏格拉底", c1, c2).start();
         new Philosopher("柏拉图", c2, c3).start();
         new Philosopher("亚里士多德", c3, c4).start();
         new Philosopher("赫拉克利特", c4, c5).start();
+//        new Philosopher("阿基米德", c5, c1).start();
+
+        // 修改一个为先拿右边，再拿左边，此时就不会死锁，但是此时自己得到锁的机会就变小了
         new Philosopher("阿基米德", c1, c5).start();
     }
 }
 
+/**
+ * 哲学家类
+ */
 @Slf4j(topic = "c.Philosopher")
 class Philosopher extends Thread {
     Chopstick left;
@@ -40,7 +50,9 @@ class Philosopher extends Thread {
                 synchronized (right) {
                     eat();
                 }
+                // 放下右手筷子
             }
+            //　放下左手筷子
         }
     }
 

@@ -48,20 +48,20 @@ interface RejectPolicy<T> {
 @Slf4j(topic = "c.ThreadPool")
 class ThreadPool {
     // 任务队列
-    private BlockingQueue<Runnable> taskQueue;
+    private final BlockingQueue<Runnable> taskQueue;
 
     // 线程集合
-    private HashSet<Worker> workers = new HashSet<>();
+    private final HashSet<Worker> workers = new HashSet<>();
 
     // 核心线程数
-    private int coreSize;
+    private final int coreSize;
 
     // 获取任务时的超时时间
-    private long timeout;
+    private final long timeout;
 
-    private TimeUnit timeUnit;
+    private final TimeUnit timeUnit;
 
-    private RejectPolicy<Runnable> rejectPolicy;
+    private final RejectPolicy<Runnable> rejectPolicy;
 
     // 执行任务
     public void execute(Runnable task) {
@@ -126,19 +126,19 @@ class ThreadPool {
 @Slf4j(topic = "c.BlockingQueue")
 class BlockingQueue<T> {
     // 1. 任务队列
-    private Deque<T> queue = new ArrayDeque<>();
+    private final Deque<T> queue = new ArrayDeque<>();
 
     // 2. 锁
-    private ReentrantLock lock = new ReentrantLock();
+    private final ReentrantLock lock = new ReentrantLock();
 
     // 3. 生产者条件变量
-    private Condition fullWaitSet = lock.newCondition();
+    private final Condition fullWaitSet = lock.newCondition();
 
     // 4. 消费者条件变量
-    private Condition emptyWaitSet = lock.newCondition();
+    private final Condition emptyWaitSet = lock.newCondition();
 
     // 5. 容量
-    private int capcity;
+    private final int capcity;
 
     public BlockingQueue(int capcity) {
         this.capcity = capcity;

@@ -33,12 +33,12 @@ class Pool {
     private final int poolSize;
 
     // 2. 连接对象数组
-    private Connection[] connections;
+    private final Connection[] connections;
 
     // 3. 连接状态数组 0 表示空闲， 1 表示繁忙
-    private AtomicIntegerArray states;
+    private final AtomicIntegerArray states;
 
-    private Semaphore semaphore;
+    private final Semaphore semaphore;
 
     // 4. 构造方法初始化
     public Pool(int poolSize) {
@@ -87,7 +87,7 @@ class Pool {
 
 class MockConnection implements Connection {
 
-    private String name;
+    private final String name;
 
     public MockConnection(String name) {
         this.name = name;

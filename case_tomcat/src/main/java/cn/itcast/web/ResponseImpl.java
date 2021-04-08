@@ -13,12 +13,12 @@ import java.util.Locale;
 
 public class ResponseImpl implements HttpServletResponse {
 
-    private Socket socket;
+    private final Socket socket;
 
-    private ServletOutputStream outputStream;
+    private final ServletOutputStream outputStream;
 
     private class ServletOutputStreamImpl extends ServletOutputStream {
-        private OutputStream out;
+        private final OutputStream out;
 
         private ServletOutputStreamImpl() throws IOException {
             out = socket.getOutputStream();

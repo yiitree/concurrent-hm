@@ -1,4 +1,4 @@
-package cn.itcast.test;
+package cn.itcast.test.固定顺序执行;
 
 import lombok.extern.slf4j.Slf4j;
 

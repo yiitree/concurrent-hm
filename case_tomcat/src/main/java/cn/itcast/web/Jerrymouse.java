@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.*;
 
 @Slf4j(topic = "c.Jerrymouse")
@@ -73,7 +74,7 @@ public class Jerrymouse {
         out.write("HTTP/1.1 404 NOT FOUND".getBytes());
         out.write(LINE_BYTES);
         String html = "{\"error\":\"NOT FOUND\"}";
-        byte[] bytes = html.getBytes(UTF8);
+        byte[] bytes = html.getBytes(StandardCharsets.UTF_8);
         out.write("Content-Type: application/json;charset=utf-8".getBytes());
         out.write(LINE_BYTES);
         out.write(("Content-Length: " + bytes.length).getBytes());
@@ -88,7 +89,7 @@ public class Jerrymouse {
         out.write("HTTP/1.1 200 OK".getBytes());
         out.write(LINE_BYTES);
         String html = "<html><body><h1>hello, Jerrymouse</h1></body></html>";
-        byte[] bytes = html.getBytes(UTF8);
+        byte[] bytes = html.getBytes(StandardCharsets.UTF_8);
         out.write("Content-Type: text/html;charset=utf-8".getBytes());
         out.write(LINE_BYTES);
         out.write(("Content-Length: " + bytes.length).getBytes());

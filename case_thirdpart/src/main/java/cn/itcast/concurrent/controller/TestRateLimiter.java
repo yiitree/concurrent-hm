@@ -9,7 +9,7 @@ import java.util.concurrent.Semaphore;
 public class TestRateLimiter {
 
     //    private RateLimiter limiter = RateLimiter.create(50);
-    private Semaphore semaphore = new Semaphore(2);
+    private final Semaphore semaphore = new Semaphore(2);
 
     @GetMapping("/test")
     public String test() throws InterruptedException {

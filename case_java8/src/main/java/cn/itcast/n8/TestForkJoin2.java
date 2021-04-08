@@ -20,7 +20,7 @@ public class TestForkJoin2 {
 @Slf4j(topic = "c.MyTask")
 class MyTask extends RecursiveTask<Integer> {
 
-    private int n;
+    private final int n;
 
     public MyTask(int n) {
         this.n = n;

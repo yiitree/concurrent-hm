@@ -74,8 +74,8 @@ public class GenericDao {
 
     static class BeanRowMapper<T> implements RowMapper<T> {
 
-        private Class<T> beanClass;
-        private Map<String, PropertyDescriptor> propertyMap = new HashMap<>();
+        private final Class<T> beanClass;
+        private final Map<String, PropertyDescriptor> propertyMap = new HashMap<>();
 
         public BeanRowMapper(Class<T> beanClass) {
             this.beanClass = beanClass;

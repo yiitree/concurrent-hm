@@ -23,9 +23,9 @@ public class TestReadWriteLock {
 @Slf4j(topic = "c.DataContainer")
 class DataContainer {
     private Object data;
-    private ReentrantReadWriteLock rw = new ReentrantReadWriteLock();
-    private ReentrantReadWriteLock.ReadLock r = rw.readLock();
-    private ReentrantReadWriteLock.WriteLock w = rw.writeLock();
+    private final ReentrantReadWriteLock rw = new ReentrantReadWriteLock();
+    private final ReentrantReadWriteLock.ReadLock r = rw.readLock();
+    private final ReentrantReadWriteLock.WriteLock w = rw.writeLock();
 
     public Object read() {
         log.debug("获取读锁...");

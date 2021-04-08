@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.util.*;
 
@@ -19,11 +20,11 @@ public class RequestImpl implements HttpServletRequest {
     private String method;
     private String requestURI;
     private String queryString;
-    private Map<String, String> headers = new HashMap<>();
+    private final Map<String, String> headers = new HashMap<>();
 
     public RequestImpl(Socket socket) throws IOException {
         this.socket = socket;
-        this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), Jerrymouse.UTF8));
+        this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
         String line = reader.readLine();
         if(line != null) {
             String[] requestLine = line.split(" ");

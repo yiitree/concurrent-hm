@@ -6,6 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Random;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * 使用ReentrantLock锁处理哲学家吃饭问题
+ */
 @Slf4j(topic = "c.Test23")
 public class Test23 {public static void main(String[] args) {
     Chopstick c1 = new Chopstick("1");
@@ -32,6 +35,9 @@ class Philosopher extends Thread {
         this.right = right;
     }
 
+    /**
+     * 没有获得筷子的时候就放弃这次获取
+     */
     @Override
     public void run() {
         while (true) {
@@ -43,11 +49,13 @@ class Philosopher extends Thread {
                         try {
                             eat();
                         } finally {
+                            // 放回右手筷子
                             right.unlock();
                         }
                     }
                 } finally {
-                    left.unlock(); // 释放自己手里的筷子
+                    // 如果没有拿到右手筷子，就放回左手筷子
+                    left.unlock();
                 }
             }
         }

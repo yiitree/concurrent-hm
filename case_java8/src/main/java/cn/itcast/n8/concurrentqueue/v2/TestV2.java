@@ -114,8 +114,8 @@ class MyQueue<E> implements Queue<E> {
         tail = new AtomicReference<>(initNode);
     }
 
-    private AtomicReference<Node<E>> dummy;
-    private AtomicReference<Node<E>> tail;
+    private final AtomicReference<Node<E>> dummy;
+    private final AtomicReference<Node<E>> tail;
 
     private E dequeue() {
         /*Node<E> h = head;
@@ -148,8 +148,8 @@ class MyQueue<E> implements Queue<E> {
     }
 
     private static class Node<E> {
-        private AtomicReference<E> item;
-        private AtomicReference<Node<E>> next;
+        private final AtomicReference<E> item;
+        private final AtomicReference<Node<E>> next;
 
         public Node(AtomicReference<E> item, AtomicReference<Node<E>> next) {
             this.item = item;

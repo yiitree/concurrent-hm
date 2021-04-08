@@ -68,7 +68,7 @@ class MyLock implements Lock {
         }
     }
 
-    private MySync sync = new MySync();
+    private final MySync sync = new MySync();
 
     @Override // 加锁（不成功会进入等待队列）
     public void lock() {

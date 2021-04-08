@@ -1,9 +1,13 @@
-package cn.itcast.test;
+package cn.itcast.test.交替执行;
 
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.locks.LockSupport;
 
+/**
+ * 交替执行：
+ * park-unpark
+ */
 @Slf4j(topic = "c.Test31")
 public class Test31 {
 
@@ -38,7 +42,7 @@ class ParkUnpark {
         }
     }
 
-    private int loopNumber;
+    private final int loopNumber;
 
     public ParkUnpark(int loopNumber) {
         this.loopNumber = loopNumber;

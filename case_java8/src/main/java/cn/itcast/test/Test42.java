@@ -12,7 +12,7 @@ public class Test42 {
 }
 
 class MyAtomicInteger implements Account {
-    private volatile int value;
+    private final int value;
     private static final long valueOffset;
     private static final Unsafe UNSAFE;
     static {

@@ -8,9 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j(topic = "c.Postman")
 public class Postman extends Thread {
     /** 信件id */
-    private int id;
+    private final int id;
     /** 信件内容 */
-    private String mail;
+    private final String mail;
 
     public Postman(int id, String mail) {
         this.id = id;

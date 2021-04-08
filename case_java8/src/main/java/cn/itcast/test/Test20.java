@@ -45,8 +45,8 @@ class People extends Thread{
  */
 @Slf4j(topic = "c.Postman")
 class Postman extends Thread {
-    private int id;
-    private String mail;
+    private final int id;
+    private final String mail;
 
     public Postman(int id, String mail) {
         this.id = id;
@@ -68,7 +68,7 @@ class Postman extends Thread {
  */
 class Mailboxes {
     // 选择hashTable，线程安全
-    private static Map<Integer, GuardedObject> boxes = new Hashtable<>();
+    private static final Map<Integer, GuardedObject> boxes = new Hashtable<>();
 
     private static int id = 1;
 

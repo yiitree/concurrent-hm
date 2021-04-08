@@ -7,7 +7,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 class SyncWaitNotify {
     private int flag;
-    private int loopNumber;
+    private final int loopNumber;
 
     public SyncWaitNotify(int flag, int loopNumber) {
         this.flag = flag;
@@ -35,7 +35,7 @@ class SyncWaitNotify {
 class SyncLock extends ReentrantLock {
     Condition waitSet = this.newCondition();
     private int flag;
-    private int loopNumber;
+    private final int loopNumber;
 
     public SyncLock(int flag, int loopNumber) {
         this.flag = flag;
@@ -64,7 +64,7 @@ class SyncLock extends ReentrantLock {
 }
 
 class SyncPark {
-    private int loopNumber;
+    private final int loopNumber;
     private Thread[] threads;
 
     public SyncPark(int loopNumber) {
