@@ -1,32 +1,18 @@
-package cn.itcast.test;
+package cn.itcast.test.打断线程;
 
 import lombok.extern.slf4j.Slf4j;
 
 /**
  * 两阶段终止模式
+ * 使用volatile
  */
-@Slf4j(topic = "c.TwoPhaseTermination")
-public class Test13 {
-    public static void main(String[] args) throws InterruptedException {
-        // 启动一个监视器
-        TwoPhaseTermination tpt = new TwoPhaseTermination();
-        tpt.start();
-        tpt.start();
-        tpt.start();
-
-        Thread.sleep(3500);
-        log.debug("停止监控");
-        tpt.stop();
-    }
-}
-
-@Slf4j(topic = "c.TwoPhaseTermination")
-class TwoPhaseTermination {
+@Slf4j(topic = "TwoPhaseVolatile")
+public class TwoPhaseVolatile {
     // 监控线程
     private Thread monitorThread;
     // 停止标记
     private volatile boolean stop = false;
-    // 判断是否执行过 start 方法
+    // 判断是否执行过 start 方法---保证监控线程只执行一次
     private boolean starting = false;
 
     /**
@@ -34,7 +20,7 @@ class TwoPhaseTermination {
      */
     public void start() {
         synchronized (this) {
-            // false
+            // false说明执行过一次
             if (starting) {
                 return;
             }
@@ -42,7 +28,6 @@ class TwoPhaseTermination {
         }
         monitorThread = new Thread(() -> {
             while (true) {
-                Thread current = Thread.currentThread();
                 // 是否被打断(正常阶段打断)
                 if (stop) {
                     log.debug("料理后事");
@@ -65,6 +50,5 @@ class TwoPhaseTermination {
      */
     public void stop() {
         stop = true;
-        monitorThread.interrupt();
     }
 }

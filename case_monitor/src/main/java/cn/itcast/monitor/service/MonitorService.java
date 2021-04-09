@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class MonitorService {
 
     private volatile boolean stop;
+    // 启动标记
     private volatile boolean starting;
     private Thread monitorThread;
 
