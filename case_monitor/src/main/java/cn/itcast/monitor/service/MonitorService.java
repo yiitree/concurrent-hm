@@ -67,4 +67,21 @@ public class MonitorService {
         monitorThread.interrupt();
     }
 
+
+    volatile int vol = 10;
+    int j1;
+    int j2;
+    int j3;
+public void get(){
+    j1++;
+    j2++;
+    vol = 1;// 写操作
+    // 之前变量都会同步到主存中
+    // 之后操作为写屏障
+
+    // 之前操作为读屏障
+    j3 = vol;// 读操作
+    // 之后读取的值都是主存的值
+}
+
 }
