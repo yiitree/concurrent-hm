@@ -3,11 +3,14 @@ package cn.itcast.test;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * AtomicReference
+ * 原子引用类型
+ */
 @Slf4j(topic = "c.Test35")
 public class Test35 {
     public static void main(String[] args) {
@@ -15,23 +18,39 @@ public class Test35 {
     }
 }
 
+/**
+ * 取款实现
+ */
 class DecimalAccountCas implements DecimalAccount {
+
+    /**
+     * 使用原子引用类型
+     */
     private final AtomicReference<BigDecimal> balance;
 
     public DecimalAccountCas(BigDecimal balance) {
-//        this.balance = balance;
         this.balance = new AtomicReference<>(balance);
     }
 
+    /**
+     * 获取余额
+     * @return
+     */
     @Override
     public BigDecimal getBalance() {
         return balance.get();
     }
 
+    /**
+     * 进行取钱
+     * @param amount
+     */
     @Override
     public void withdraw(BigDecimal amount) {
         while(true) {
+            // 获得之前值
             BigDecimal prev = balance.get();
+            // 获得取钱后的值
             BigDecimal next = prev.subtract(amount);
             if (balance.compareAndSet(prev, next)) {
                 break;
@@ -40,6 +59,9 @@ class DecimalAccountCas implements DecimalAccount {
     }
 }
 
+/**
+ * 账户接口
+ */
 interface DecimalAccount {
     // 获取余额
     BigDecimal getBalance();

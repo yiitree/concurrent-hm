@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j(topic = "c.Test37")
 public class Test37 {
+
     public static void main(String[] args) throws ParseException, InterruptedException {
         Date a = getDate("1999-10-1");
         AtomicReference<Date> ref = new AtomicReference<>(a);
