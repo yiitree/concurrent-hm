@@ -1,6 +1,5 @@
 package cn.itcast.n7;
 
-
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.*;
@@ -10,17 +9,24 @@ import java.util.Random;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicIntegerArray;
 
+/**
+ * 享元模式，自定义一个数据库连接池
+ * 主要是保证得到连接和归还连接是安全的
+ */
 public class Test3 {
     public static void main(String[] args) {
+        // 两个连接的连接池
         Pool pool = new Pool(2);
         for (int i = 0; i < 5; i++) {
             new Thread(() -> {
+                // 从连接池获取连接
                 Connection conn = pool.borrow();
                 try {
                     Thread.sleep(new Random().nextInt(1000));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                // 正式环境中应该放在finally里，确保释放
                 pool.free(conn);
             }).start();
         }
@@ -29,13 +35,14 @@ public class Test3 {
 
 @Slf4j(topic = "c.Pool")
 class Pool {
-    // 1. 连接池大小
+    // 1. 连接池大小---固定的
     private final int poolSize;
 
     // 2. 连接对象数组
     private final Connection[] connections;
 
-    // 3. 连接状态数组 0 表示空闲， 1 表示繁忙
+    // 3. 连接状态数组 0 表示空闲， 1 表示繁忙---指的是数组中每一个对象是空闲还是繁忙
+    // 使用AtomicIntegerArray是针对数组中每一个数据进行加锁，加锁范围最小，效率最高贵
     private final AtomicIntegerArray states;
 
     // 4. 构造方法初始化
@@ -51,18 +58,23 @@ class Pool {
     // 5. 借连接
     public Connection borrow() {
         while(true) {
+            // 这里可以继续优化，进行连接池扩容和缩小，其次，也应该对连接池中的连接进行活性检测，假如网络不好，连接直接断开了
             for (int i = 0; i < poolSize; i++) {
                 // 获取空闲连接
                 if(states.get(i) == 0) {
+                    // 得到连接后，就吧0改为1，说明被自己占用了，这里使用compareAndSet
                     if (states.compareAndSet(i, 0, 1)) {
                         log.debug("borrow {}", connections[i]);
                         return connections[i];
                     }
                 }
             }
+            // 这里上面使用cas，下面使用wait，其实下面不用wait也可以，但是效率低，
+            // cas适合用在短时间的操作，这里是生产者和消费者，假如别的一直在执行，那这里就要一直循环等待，消耗资源
             // 如果没有空闲连接，当前线程进入等待
             synchronized (this) {
                 try {
+                    // 可以优化，做一个超时处理，保护性暂停
                     log.debug("wait...");
                     this.wait();
                 } catch (InterruptedException e) {
@@ -72,13 +84,16 @@ class Pool {
         }
     }
 
-    // 6. 归还连接
+    // 6. 还连接
     public void free(Connection conn) {
         for (int i = 0; i < poolSize; i++) {
+            // 判断归还的连接是否是连接池中的连接
             if (connections[i] == conn) {
+                // 归还的连接，只有一个，所以没有竞争，不需要同步
                 states.set(i, 0);
                 synchronized (this) {
                     log.debug("free {}", conn);
+                    // 唤醒等待的线程---因为唤醒需要使用锁才能唤醒，因此加一个锁
                     this.notifyAll();
                 }
                 break;
@@ -87,6 +102,9 @@ class Pool {
     }
 }
 
+/**
+ * 连接对象
+ */
 class MockConnection implements Connection {
 
     private final String name;

@@ -1,6 +1,7 @@
 package cn.itcast.n5;
 
 public class TestFinal {
+
     static int A = 10;
     static int B = Short.MAX_VALUE+1;
 
