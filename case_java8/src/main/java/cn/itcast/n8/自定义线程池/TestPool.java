@@ -10,8 +10,15 @@ import java.util.concurrent.TimeUnit;
 @Slf4j(topic = "c.TestPool")
 public class TestPool {
     public static void main(String[] args) {
-        ThreadPool threadPool = new ThreadPool(1,
-                1000, TimeUnit.MILLISECONDS, 1, (queue, task)->{
+        ThreadPool threadPool = new ThreadPool(
+                // 最大线程个数
+                1,
+                // 超时时间
+                1000,
+                // 时间单位
+                TimeUnit.MILLISECONDS,
+                // 阻塞队列容量---构造方法中会自动new一个阻塞队列
+                1, (queue, task)->{
             // 1. 死等
 //            queue.put(task);
             // 2) 带超时等待
