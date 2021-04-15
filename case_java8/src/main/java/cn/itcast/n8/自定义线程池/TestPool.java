@@ -10,6 +10,8 @@ import java.util.concurrent.TimeUnit;
 @Slf4j(topic = "c.TestPool")
 public class TestPool {
     public static void main(String[] args) {
+
+        // 创建一个线程池
         ThreadPool threadPool = new ThreadPool(
                 // 最大线程个数
                 1,
@@ -18,19 +20,23 @@ public class TestPool {
                 // 时间单位
                 TimeUnit.MILLISECONDS,
                 // 阻塞队列容量---构造方法中会自动new一个阻塞队列
-                1, (queue, task)->{
+                1,
+                // 拒绝策略
+                (queue, task)->{
             // 1. 死等
-//            queue.put(task);
+            queue.put(task);
             // 2) 带超时等待
 //            queue.offer(task, 1500, TimeUnit.MILLISECONDS);
             // 3) 让调用者放弃任务执行
 //            log.debug("放弃{}", task);
             // 4) 让调用者抛出异常
 //            throw new RuntimeException("任务执行失败 " + task);
-            // 5) 让调用者自己执行任务
-            task.run();
+            // 5) 让调用者自己执行任务---相当于主线程自己执行方法，不走多线程了
+//            task.run();
         });
-        for (int i = 0; i < 4; i++) {
+
+        // 向线程池中添加方法
+        for (int i = 0; i < 5; i++) {
             int j = i;
             threadPool.execute(() -> {
                 try {

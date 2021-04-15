@@ -1,7 +1,7 @@
 package cn.itcast.n8.自定义线程池;
 
 /**
- * 拒绝策略
+ * 拒绝策略---队列满了
  * @param <T>
  */
 @FunctionalInterface

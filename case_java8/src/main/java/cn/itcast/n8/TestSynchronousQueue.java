@@ -6,10 +6,15 @@ import java.util.concurrent.SynchronousQueue;
 
 import static cn.itcast.n2.util.Sleeper.sleep;
 
+/**
+ * SynchronousQueue队列
+ * 没有容量，只有有人要拿，才可以放
+ */
 @Slf4j(topic = "c.TestSynchronousQueue")
 public class TestSynchronousQueue {
     public static void main(String[] args) {
         SynchronousQueue<Integer> integers = new SynchronousQueue<>();
+        // 放
         new Thread(() -> {
             try {
                 log.debug("putting {} ", 1);
@@ -26,6 +31,7 @@ public class TestSynchronousQueue {
 
         sleep(1);
 
+        // 取1
         new Thread(() -> {
             try {
                 log.debug("taking {}", 1);
@@ -37,6 +43,7 @@ public class TestSynchronousQueue {
 
         sleep(1);
 
+        // 取2
         new Thread(() -> {
             try {
                 log.debug("taking {}", 2);
