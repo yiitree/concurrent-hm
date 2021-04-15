@@ -9,10 +9,11 @@ import java.util.concurrent.RecursiveTask;
 public class TestForkJoin2 {
 
     public static void main(String[] args) {
+        // 默认线程个数等于cpu个数
         ForkJoinPool pool = new ForkJoinPool(4);
         System.out.println(pool.invoke(new MyTask(5)));
 
-        // new MyTask(5)  5+ new MyTask(4)  4 + new MyTask(3)  3 + new MyTask(2)  2 + new MyTask(1)
+
     }
 }
 
@@ -30,6 +31,9 @@ class MyTask extends RecursiveTask<Integer> {
     public String toString() {
         return "{" + n + '}';
     }
+
+    // 任务拆分
+    // new MyTask(5)  5+ new MyTask(4)  4 + new MyTask(3)  3 + new MyTask(2)  2 + new MyTask(1)
 
     @Override
     protected Integer compute() {
