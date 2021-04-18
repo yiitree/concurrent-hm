@@ -1,4 +1,4 @@
-package cn.itcast.n8;
+package cn.itcast.n8.读写锁;
 
 import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -23,8 +23,18 @@ public class TestGenericDao {
     }
 }
 
+/**
+ * Dao增强
+ * 带缓存的Dao---增加缓存
+ */
 class GenericDaoCached extends GenericDao {
+
     private final GenericDao dao = new GenericDao();
+    /**
+     * map集合，作为缓存---HashMap是不安全的
+     * key：sql语句+传参
+     * value：查询结果
+     */
     private final Map<SqlPair, Object> map = new HashMap<>();
     private final ReentrantReadWriteLock rw = new ReentrantReadWriteLock();
 
@@ -33,10 +43,14 @@ class GenericDaoCached extends GenericDao {
         return dao.queryList(beanClass, sql, args);
     }
 
+    /**
+     * 查询一个，先从缓存中找，如果没有找到再查询数据库
+     */
     @Override
     public <T> T queryOne(Class<T> beanClass, String sql, Object... args) {
         // 先从缓存中找，找到直接返回
         SqlPair key = new SqlPair(sql, args);
+        // 读锁
         rw.readLock().lock();
         try {
             T value = (T) map.get(key);
@@ -46,9 +60,11 @@ class GenericDaoCached extends GenericDao {
         } finally {
             rw.readLock().unlock();
         }
+        // 缓存中没有，查询数据库
+        // 写锁
         rw.writeLock().lock();
         try {
-            // 多个线程
+            // 多个线程，双重验证，此时一个已经添加到缓存了，就不用再改了
             T value = (T) map.get(key);
             if(value == null) {
                 // 缓存中没有，查询数据库
@@ -61,8 +77,15 @@ class GenericDaoCached extends GenericDao {
         }
     }
 
+    /**
+     * 更新语句---要考虑到缓存的更新策略
+     * @param sql
+     * @param args
+     * @return
+     */
     @Override
     public int update(String sql, Object... args) {
+        // 加写锁
         rw.writeLock().lock();
         try {
             // 先更新库
@@ -75,6 +98,10 @@ class GenericDaoCached extends GenericDao {
         }
     }
 
+    /**
+     * sql语句+传参
+     * 确保查询是唯一的
+     */
     class SqlPair {
         private final String sql;
         private final Object[] args;
