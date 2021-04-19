@@ -9,16 +9,16 @@ public class TestGenericDao {
         System.out.println("============> 查询");
         String sql = "select * from emp where empno = ?";
         int empno = 7369;
-        Emp emp = dao.queryOne(Emp.class, sql, empno);
+        Emp emp = (Emp) dao.queryOne(Emp.class, sql, empno);
         System.out.println(emp);
-        emp = dao.queryOne(Emp.class, sql, empno);
+        emp = (Emp)dao.queryOne(Emp.class, sql, empno);
         System.out.println(emp);
-        emp = dao.queryOne(Emp.class, sql, empno);
+        emp = (Emp)dao.queryOne(Emp.class, sql, empno);
         System.out.println(emp);
 
         System.out.println("============> 更新");
         dao.update("update emp set sal = ? where empno = ?", 800, empno);
-        emp = dao.queryOne(Emp.class, sql, empno);
+        emp = (Emp)dao.queryOne(Emp.class, sql, empno);
         System.out.println(emp);
     }
 }
@@ -30,12 +30,14 @@ public class TestGenericDao {
 class GenericDaoCached extends GenericDao {
 
     private final GenericDao dao = new GenericDao();
+
     /**
      * map集合，作为缓存---HashMap是不安全的
      * key：sql语句+传参
      * value：查询结果
      */
     private final Map<SqlPair, Object> map = new HashMap<>();
+
     private final ReentrantReadWriteLock rw = new ReentrantReadWriteLock();
 
     @Override
@@ -45,12 +47,14 @@ class GenericDaoCached extends GenericDao {
 
     /**
      * 查询一个，先从缓存中找，如果没有找到再查询数据库
+     * @return
      */
     @Override
-    public <T> T queryOne(Class<T> beanClass, String sql, Object... args) {
-        // 先从缓存中找，找到直接返回
+    public <T> Object queryOne(Class<T> beanClass, String sql, Object... args) {
+
         SqlPair key = new SqlPair(sql, args);
-        // 读锁
+
+        // 先从缓存中找，找到直接返回
         rw.readLock().lock();
         try {
             T value = (T) map.get(key);
@@ -60,15 +64,14 @@ class GenericDaoCached extends GenericDao {
         } finally {
             rw.readLock().unlock();
         }
+
         // 缓存中没有，查询数据库
-        // 写锁
         rw.writeLock().lock();
         try {
-            // 多个线程，双重验证，此时一个已经添加到缓存了，就不用再改了
+            // 缓存中没有，查询数据库,先双重验证，防止在读取的时候别人写进了
             T value = (T) map.get(key);
             if(value == null) {
-                // 缓存中没有，查询数据库
-                value = dao.queryOne(beanClass, sql, args);
+                value = (T) dao.queryOne(beanClass, sql, args);
                 map.put(key, value);
             }
             return value;

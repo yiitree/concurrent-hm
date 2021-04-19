@@ -6,6 +6,10 @@ import java.util.concurrent.locks.StampedLock;
 
 import static cn.itcast.n2.util.Sleeper.sleep;
 
+/**
+ * java8新类 - 乐观读
+ * StampedLock案例
+ */
 @Slf4j(topic = "c.TestStampedLock")
 public class TestStampedLock {
     public static void main(String[] args) {
@@ -30,6 +34,7 @@ class DataContainerStamped {
     }
 
     public int read(int readTime) {
+        // 乐观读 - 实际上是不加锁
         long stamp = lock.tryOptimisticRead();
         log.debug("optimistic read locking...{}", stamp);
         sleep(readTime);
@@ -37,7 +42,7 @@ class DataContainerStamped {
             log.debug("read finish...{}, data:{}", stamp, data);
             return data;
         }
-        // 锁升级 - 读锁
+        // 如果戳验证失败，说明有其他线程进来了，此时需要锁升级 - 读锁
         log.debug("updating to read lock... {}", stamp);
         try {
             stamp = lock.readLock();

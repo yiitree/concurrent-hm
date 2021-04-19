@@ -19,7 +19,7 @@ public class GenericDao {
         return queryList(sql, mapper, args);
     }
 
-    public <T> T queryOne(Class<T> beanClass, String sql, Object... args) {
+    public <T> Object queryOne(Class<T> beanClass, String sql, Object... args) {
         System.out.println("sql: [" + sql + "] params:" + Arrays.toString(args));
         BeanRowMapper<T> mapper = new BeanRowMapper<>(beanClass);
         return queryOne(sql, mapper, args);
