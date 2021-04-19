@@ -6,6 +6,8 @@ import java.util.concurrent.locks.Lock;
 
 /**
  * 自定义锁（不可重入锁,自己加的锁也会挡住自己）
+ * 实现Lock方法其实是使用sync的内部方法
+ *
  */
 public class MyLock implements Lock {
 
