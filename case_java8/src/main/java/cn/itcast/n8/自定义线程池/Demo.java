@@ -1,8 +1,8 @@
 package cn.itcast.n8.自定义线程池;
 
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @Author: 曾睿
@@ -12,7 +12,7 @@ public class Demo {
 
     public static void main(String[] args) throws Exception {
 
-        ExecutorService pool = Executors.newFixedThreadPool(3);
+        ThreadPoolExecutor pool =(ThreadPoolExecutor) Executors.newFixedThreadPool(3);
 
         Thread thread = new Thread(){
             @Override
@@ -54,6 +54,11 @@ public class Demo {
         pool.submit(thread);
         pool.submit(runnable);
         pool.submit(callable);
+
+        pool.execute(thread);
+        pool.execute(runnable);
+//        pool.execute(callable);
+
 
     }
 

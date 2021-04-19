@@ -27,6 +27,9 @@ public class TestReadWriteLock {
 
 @Slf4j(topic = "c.DataContainer")
 class DataContainer {
+    /**
+     * 数据
+     */
     private Object data;
     /**
      * ReentrantReadWriteLock锁，用于分别获得 读锁 和 写锁
