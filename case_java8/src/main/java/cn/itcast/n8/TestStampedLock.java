@@ -38,7 +38,9 @@ class DataContainerStamped {
         long stamp = lock.tryOptimisticRead();
         log.debug("optimistic read locking...{}", stamp);
         sleep(readTime);
+        // 验证戳
         if (lock.validate(stamp)) {
+            // 如果戳是有效的，就可以执行
             log.debug("read finish...{}, data:{}", stamp, data);
             return data;
         }
