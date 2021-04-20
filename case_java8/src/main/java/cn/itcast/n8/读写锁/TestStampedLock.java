@@ -1,4 +1,4 @@
-package cn.itcast.n8;
+package cn.itcast.n8.读写锁;
 
 import lombok.extern.slf4j.Slf4j;
 
