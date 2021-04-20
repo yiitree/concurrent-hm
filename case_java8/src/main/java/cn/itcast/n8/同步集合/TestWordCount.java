@@ -1,4 +1,4 @@
-package cn.itcast.n8;
+package cn.itcast.n8.同步集合;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -15,6 +15,9 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/**
+ * 多线程读取文件
+ */
 public class TestWordCount {
     public static void main(String[] args) {
         demo(
@@ -24,18 +27,19 @@ public class TestWordCount {
 
                 (map, words) -> {
                     for (String word : words) {
-
-                        // 如果缺少一个 key，则计算生成一个 value , 然后将  key value 放入 map
-                        //                  a      0
+                        // computeIfAbsent 如果缺少一个 key，则计算生成一个 value , 然后将  key value 放入 map
+                        // map中如果有指定key不做操作，如果没有，进行修改，修改的值就是第二个参数方法的返回值，并返回改值
                         LongAdder value = map.computeIfAbsent(word, (key) -> new LongAdder());
-                        // 执行累加
+                        // 执行累加`
                         value.increment(); // 2
 
-                        /*// 检查 key 有没有
-                        Integer counter = map.get(word);
-                        int newValue = counter == null ? 1 : counter + 1;
-                        // 没有 则 put
-                        map.put(word, newValue);*/
+                        // 主要是get 、put 两个方法合起来不是安全的
+//                        // 检查 key 有没有
+//                        Integer counter = map.get(word);
+//                        int newValue = counter == null ? 1 : counter + 1;
+//                        // 没有 则 put
+//                        map.put(word, newValue);
+
                     }
                 }
         );
@@ -43,7 +47,6 @@ public class TestWordCount {
 
 
     private static void demo2() {
-
         Map<String, Integer> collect = IntStream.range(1, 27).parallel()
                 .mapToObj(idx -> readFromFile(idx))
                 .flatMap(list -> list.stream())
