@@ -6,28 +6,29 @@ package cn.itcast.my;
  */
 public class MyJoin {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Thread thread = new Thread(() -> {
+            System.out.println(Thread.interrupted());
             System.out.println("开始");
             try {
-                Thread.sleep(30000);
+                Thread.sleep(3000);
                 System.out.println("结束");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            System.out.println(Thread.interrupted());
         });
+
         thread.start();
         try {
+            Thread.sleep(1000);
             thread.join();
-            thread.wait(0);
+            Thread.sleep(1000);
+            thread.interrupt();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         System.out.println("main开始");
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
     }
 }

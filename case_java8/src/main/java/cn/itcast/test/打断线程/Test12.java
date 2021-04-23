@@ -1,7 +1,10 @@
-package cn.itcast.test;
+package cn.itcast.test.打断线程;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 使用interrupt打断
+ */
 @Slf4j(topic = "c.Test12")
 public class Test12 {
 

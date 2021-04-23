@@ -21,8 +21,8 @@ public class TestCyclicBarrier {
     }
 
     /**
-     * 反复运行多次
      * CountDownLatch
+     * 反复运行多次
      * 缺点：CountDownLatch不可以被重用，因此需要反复创建该对象
      * 这里要求线程数和计数不需要一致，因为每次都是到零后停止，然后重新创建线程，就不会出现先执行t1t3线程了
      */
@@ -30,8 +30,8 @@ public class TestCyclicBarrier {
 
         ExecutorService service = Executors.newFixedThreadPool(20);
         for (int i = 0; i < 3; i++) {
-            // 不可以被重用，需要反复创建该对象  设置计数个数后就无法修改
             CountDownLatch latch = new CountDownLatch(2);
+            // 不可以被重用，需要反复创建该对象  设置计数个数后就无法修改
             service.submit(() -> {
                 log.debug("task1 start...");
                 sleep(1);
@@ -55,6 +55,7 @@ public class TestCyclicBarrier {
     }
 
     /**
+     * CyclicBarrier
      * 线程数和计数要一样，否则就会执行三个线程，
      * t1-task1 1s
      * t2-task2 2s
@@ -62,7 +63,7 @@ public class TestCyclicBarrier {
      * 这样就会指的t1 t3先执行完毕，而不是t1t2循环执行
      */
     public static void test2() {
-        ExecutorService service = Executors.newFixedThreadPool(20);
+        ExecutorService service = Executors.newFixedThreadPool(2);
         CyclicBarrier barrier = new CyclicBarrier(
                 // 设置计数
                 2,

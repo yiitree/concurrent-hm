@@ -1,4 +1,4 @@
-package cn.itcast.test;
+package cn.itcast.test.原子类型;
 
 import java.util.ArrayList;
 import java.util.List;

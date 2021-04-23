@@ -2,10 +2,11 @@ package cn.itcast.test;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.concurrent.TimeUnit;
-
 import static cn.itcast.n2.util.Sleeper.sleep;
 
+/**
+ * join
+ */
 @Slf4j(topic = "c.Test10")
 public class Test10 {
     static int r = 0;

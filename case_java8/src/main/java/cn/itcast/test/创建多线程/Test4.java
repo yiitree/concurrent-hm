@@ -1,4 +1,4 @@
-package cn.itcast.test;
+package cn.itcast.test.创建多线程;
 
 import cn.itcast.Constants;
 import cn.itcast.n2.util.FileReader;

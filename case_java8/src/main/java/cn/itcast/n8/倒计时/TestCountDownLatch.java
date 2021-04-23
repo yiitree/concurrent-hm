@@ -17,7 +17,7 @@ import static cn.itcast.n2.util.Sleeper.sleep;
 @Slf4j(topic = "c.TestCountDownLatch")
 public class TestCountDownLatch {
     public static void main(String[] args) throws InterruptedException, ExecutionException {
-        test1();
+        test2();
     }
 
     /**
@@ -30,27 +30,43 @@ public class TestCountDownLatch {
         new Thread(() -> {
             log.debug("begin...");
             sleep(1);
-            log.debug("end...{}", latch.getCount());
             latch.countDown();
+            log.debug("end...{}", latch.getCount());
         }).start();
 
         new Thread(() -> {
             log.debug("begin...");
             sleep(2);
-            log.debug("end...{}", latch.getCount());
             latch.countDown();
+            log.debug("end...{}", latch.getCount());
         }).start();
 
         new Thread(() -> {
             log.debug("begin...");
             sleep(1.5);
-            log.debug("end...{}", latch.getCount());
             latch.countDown();
+            log.debug("end...{}", latch.getCount());
         }).start();
 
         log.debug("waiting...");
+        // 阻塞住，只有减少到0后才开始执行
         latch.await();
         log.debug("wait end...");
+
+        // 后续再减少也是0
+        new Thread(() -> {
+            log.debug("begin...");
+            sleep(1.5);
+            latch.countDown();
+            log.debug("end...{}", latch.getCount());
+        }).start();
+
+        new Thread(() -> {
+            log.debug("begin...");
+            sleep(1.5);
+            latch.countDown();
+            log.debug("end...{}", latch.getCount());
+        }).start();
     }
 
     /**
@@ -58,25 +74,25 @@ public class TestCountDownLatch {
      */
     private static void test2() {
         // 固定大小线程池：4
-        ExecutorService service = Executors.newFixedThreadPool(4);
+        ExecutorService service = Executors.newFixedThreadPool(2);
         CountDownLatch latch = new CountDownLatch(3);
         service.submit(() -> {
             log.debug("begin...");
             sleep(1);
-            log.debug("end...{}", latch.getCount());
             latch.countDown();
+            log.debug("end...{}", latch.getCount());
         });
         service.submit(() -> {
             log.debug("begin...");
             sleep(1.5);
-            log.debug("end...{}", latch.getCount());
             latch.countDown();
+            log.debug("end...{}", latch.getCount());
         });
         service.submit(() -> {
             log.debug("begin...");
             sleep(2);
-            log.debug("end...{}", latch.getCount());
             latch.countDown();
+            log.debug("end...{}", latch.getCount());
         });
         // 等待其他线程完成后再执行
         service.submit(()->{
@@ -99,7 +115,7 @@ public class TestCountDownLatch {
         AtomicInteger num = new AtomicInteger(0);
         // 创建线程池：里面有10个线程
         ExecutorService service = Executors.newFixedThreadPool(10, (r) -> new Thread(r, "t" + num.getAndIncrement()));
-        // 锁
+        // 锁---一共等待10个
         CountDownLatch latch = new CountDownLatch(10);
 
         String[] all = new String[10];
@@ -124,7 +140,7 @@ public class TestCountDownLatch {
                 latch.countDown();
             });
         }
-        // 主线程等待，等所有加载完毕才开始执行
+        // 主线程等待，等所有加载完毕才开始执行 --- 等待前面10个结束后才执行
         latch.await();
         System.out.println("\n游戏开始...");
         service.shutdown();

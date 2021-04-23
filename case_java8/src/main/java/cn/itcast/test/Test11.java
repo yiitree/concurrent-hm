@@ -2,6 +2,9 @@ package cn.itcast.test;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * interrupt
+ */
 @Slf4j(topic = "c.Test11")
 public class Test11 {
 

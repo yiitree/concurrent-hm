@@ -2,6 +2,9 @@ package cn.itcast.test;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * yield---线程让步
+ */
 @Slf4j(topic = "c.Test9")
 public class Test9 {
 

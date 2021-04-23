@@ -1,4 +1,4 @@
-package cn.itcast.test;
+package cn.itcast.test.ReentrantLock条件变量;
 
 import lombok.extern.slf4j.Slf4j;
 
