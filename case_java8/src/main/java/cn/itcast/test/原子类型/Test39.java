@@ -36,9 +36,9 @@ public class Test39 {
     /**
      * supplier 提供者：  没有参数 有结果：()->结果
      * function 函数：   一个参数 有结果：(参数)->结果
-     * BiFunction：   多个参数 有结果: (参数1,参数2)->结果
+     *      BiFunction：   多个参数 有结果: (参数1,参数2)->结果
      * consumer 消费者： 一个参数 没结果：(参数)->void
-     * BiConsumer：   多个参数 没结果：(参数1,参数2)->void
+     *      BiConsumer：   多个参数 没结果：(参数1,参数2)->void
      *
      * @param arraySupplier 提供数组、可以是线程不安全数组或线程安全数组
      * @param lengthFun     获取数组长度的方法
